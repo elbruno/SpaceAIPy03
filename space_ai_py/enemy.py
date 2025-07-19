@@ -51,9 +51,10 @@ class Enemy:
 class EnemyManager:
     """Manages all enemies, their movement patterns, and shooting."""
     
-    def __init__(self, screen_width: int, start_y: int = 3):
-        """Initialize enemy formation."""
+    def __init__(self, screen_width: int, start_y: int = 3, bullet_speed: int = 1):
+        """Initialize enemy formation with bullet speed configuration."""
         self.screen_width = screen_width
+        self.bullet_speed = bullet_speed
         self.enemies: List[Enemy] = []
         self.bullets: List[Bullet] = []
         self.direction = 1  # 1 for right, -1 for left
@@ -141,7 +142,8 @@ class EnemyManager:
             alive_enemies = [e for e in self.enemies if e.alive]
             if alive_enemies and len(self.bullets) < 2:  # Limit enemy bullets
                 shooter = random.choice(alive_enemies)
-                bullet = Bullet(shooter.x + shooter.width // 2, shooter.y + 1, 1, is_player_bullet=False)
+                bullet_velocity = self.bullet_speed  # Positive for downward movement
+                bullet = Bullet(shooter.x + shooter.width // 2, shooter.y + 1, bullet_velocity, is_player_bullet=False)
                 self.bullets.append(bullet)
     
     def get_alive_enemies(self) -> List[Enemy]:

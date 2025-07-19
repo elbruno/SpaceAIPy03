@@ -15,13 +15,15 @@ from screenshot_service import ScreenshotService
 class GameManager:
     """Manages game state, entities, and the main game loop."""
     
-    def __init__(self, speed: int = 1):
-        """Initialize game manager with specified speed."""
+    def __init__(self, speed: int = 1, player_bullet_speed: int = 1, enemy_bullet_speed: int = 1):
+        """Initialize game manager with specified speeds."""
         # Initialize colorama
         colorama_init(autoreset=True)
         
         # Game settings
         self.speed = speed
+        self.player_bullet_speed = player_bullet_speed
+        self.enemy_bullet_speed = enemy_bullet_speed
         self.target_fps = 20 + (speed * 10)  # 30, 40, 50 FPS for speeds 1, 2, 3
         self.frame_time = 1.0 / self.target_fps
         
@@ -45,8 +47,8 @@ class GameManager:
         # Initialize game entities
         player_start_x = self.game_area_width // 2
         player_start_y = self.game_area_height - 3
-        self.player = Player(player_start_x, player_start_y, self.game_area_width)
-        self.enemy_manager = EnemyManager(self.game_area_width)
+        self.player = Player(player_start_x, player_start_y, self.game_area_width, self.player_bullet_speed)
+        self.enemy_manager = EnemyManager(self.game_area_width, bullet_speed=self.enemy_bullet_speed)
         
         # Initialize screenshot service
         self.screenshot_service = ScreenshotService()

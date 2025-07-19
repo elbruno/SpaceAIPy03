@@ -10,20 +10,30 @@ from game_manager import GameManager
 from utils import setup_console, cleanup_console
 
 
-def get_speed_selection() -> int:
-    """Get speed selection from user input."""
+def get_speed_selection() -> tuple[int, int, int]:
+    """Get speed selection from user input for game, player bullets, and enemy bullets."""
     try:
         choice = input().strip()
-        if choice == '1':
-            return 1
-        elif choice == '2':
-            return 2
-        elif choice == '3':
-            return 3
+        if not choice:  # Empty input - use defaults
+            return (1, 1, 1)
+        
+        # Parse comma-separated values
+        parts = choice.split(',')
+        if len(parts) == 1:
+            # Single value - use for all three settings
+            speed = int(parts[0]) if parts[0].isdigit() and parts[0] in ['1', '2', '3'] else 1
+            return (speed, speed, speed)
+        elif len(parts) == 3:
+            # Three values - game, player bullets, enemy bullets
+            game_speed = int(parts[0]) if parts[0].strip().isdigit() and parts[0].strip() in ['1', '2', '3'] else 1
+            player_bullet_speed = int(parts[1]) if parts[1].strip().isdigit() and parts[1].strip() in ['1', '2', '3'] else 1
+            enemy_bullet_speed = int(parts[2]) if parts[2].strip().isdigit() and parts[2].strip() in ['1', '2', '3'] else 1
+            return (game_speed, player_bullet_speed, enemy_bullet_speed)
         else:
-            return 1  # Default to slow
-    except (KeyboardInterrupt, EOFError):
-        return 1
+            # Invalid format - use defaults
+            return (1, 1, 1)
+    except (KeyboardInterrupt, EOFError, ValueError):
+        return (1, 1, 1)
 
 
 def main():
@@ -39,13 +49,13 @@ def main():
         StartScreen.show()
         
         # Get speed selection from user
-        speed = get_speed_selection()
+        game_speed, player_bullet_speed, enemy_bullet_speed = get_speed_selection()
         
         # Clear console and start game
         os.system('cls' if os.name == 'nt' else 'clear')
         
         # Create and run game
-        game = GameManager(speed)
+        game = GameManager(game_speed, player_bullet_speed, enemy_bullet_speed)
         game.run_game_loop()
         
     except KeyboardInterrupt:
