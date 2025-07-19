@@ -42,16 +42,27 @@ class StartScreen:
             "",
             "Select Game Speed:",
             "[1] Slow (default)",
+            "[2] Medium", 
+            "[3] Fast",
+            "",
+            "Select Player Bullet Speed:",
+            "[1] Slow (default)",
             "[2] Medium",
             "[3] Fast",
-            "Press ENTER for default"
+            "",
+            "Select Enemy Bullet Speed:",
+            "[1] Slow (default)",
+            "[2] Medium",
+            "[3] Fast",
+            "",
+            "Press ENTER to use defaults (1,1,1)"
         ]
         
         # Display instructions
         for i, line in enumerate(instructions):
             y_pos = instructions_start_y + i
             if y_pos < height - 2:  # Leave some space at bottom
-                if line.startswith("How to Play:") or line.startswith("Select Game Speed:"):
+                if line.startswith("How to Play:") or line.startswith("Select Game Speed:") or line.startswith("Select Player Bullet Speed:") or line.startswith("Select Enemy Bullet Speed:"):
                     print(f"\033[{y_pos};5H{Fore.YELLOW}{Style.BRIGHT}{line}{Style.RESET_ALL}")
                 elif line.startswith("["):
                     print(f"\033[{y_pos};5H{Fore.GREEN}{line}{Style.RESET_ALL}")
@@ -60,4 +71,4 @@ class StartScreen:
         
         # Position cursor for input
         input_y = instructions_start_y + len(instructions) + 2
-        print(f"\033[{input_y};5H{Fore.CYAN}Your choice: {Style.RESET_ALL}", end='', flush=True)
+        print(f"\033[{input_y};5H{Fore.CYAN}Your choices (format: game,player,enemy): {Style.RESET_ALL}", end='', flush=True)

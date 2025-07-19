@@ -10,11 +10,12 @@ from bullet import Bullet
 class Player:
     """Manages player position, movement, and bullet firing."""
     
-    def __init__(self, x: int, y: int, screen_width: int):
-        """Initialize player with starting position and screen bounds."""
+    def __init__(self, x: int, y: int, screen_width: int, bullet_speed: int = 1):
+        """Initialize player with starting position, screen bounds, and bullet speed."""
         self.x = x
         self.y = y
         self.screen_width = screen_width
+        self.bullet_speed = bullet_speed
         self.max_bullets = 3
         self.bullets: List[Bullet] = []
         self.alive = True
@@ -43,8 +44,9 @@ class Player:
         self.bullets = [bullet for bullet in self.bullets if bullet.active]
         
         if len(self.bullets) < self.max_bullets:
-            # Create new bullet at player position
-            bullet = Bullet(self.x, self.y - 1, -1, is_player_bullet=True)  # Move up
+            # Create new bullet at player position with configurable speed
+            bullet_velocity = -self.bullet_speed  # Negative for upward movement
+            bullet = Bullet(self.x, self.y - 1, bullet_velocity, is_player_bullet=True)
             self.bullets.append(bullet)
             self.last_shot_time = current_time  # Update last shot time
             return True
